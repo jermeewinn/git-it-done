@@ -1,3 +1,4 @@
+var repoNameEl = document.querySelector("#repo-name");
 var limitWarningEl = document.querySelector("#limit-warning");
 var issueContainerEl = document.querySelector("#issues-container");
 
@@ -12,13 +13,14 @@ var getRepoIssues = function(repo) {
             response.json().then(function(data) {
                 //pass response data to dom function
                 displayIssues(data);
+
+                //check if api has paginated issues
+                if (response.headers.get("Link")) {
+                console.log("repo has more than 30 issues");
+                }
             });
         } else {
             alert("there was a problem with your request!");
-        }
-        //check if api has paginated issues
-        if (response.headers.get("Link")) {
-            console.log("repo has more than 30 issues");
         }
     });
 };
@@ -69,5 +71,7 @@ var displayWarning = function(repo) {
 
      // append to warning container
     limitWarningEl.appendChild(linkEl);
+
+};
 
 getRepoIssues("facebook/react");
